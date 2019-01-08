@@ -7,6 +7,7 @@
 import {
   ON_CHANGE,
   SET_FORM,
+  SET_USER,
   SUBMIT,
 } from './constants';
 
@@ -85,4 +86,13 @@ export function submit() {
   return {
     type: SUBMIT,
   };
+}
+
+/**
+ * Set the user value
+ * @param  {Object} target strapi response data
+ * @return {Object}
+ */
+export function setUser(data) {
+  return {type: SET_USER, data};
 }

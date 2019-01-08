@@ -1,5 +1,5 @@
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { all, call, fork, takeLatest, select, take, cancel } from 'redux-saga/effects';
+import { all, call, fork, takeLatest, select, take, cancel, put } from 'redux-saga/effects';
 import { set } from 'lodash';
 import { history } from 'app';
 
@@ -8,6 +8,7 @@ import auth from 'utils/auth';
 import request from 'utils/request';
 
 import { makeSelectFormType, makeSelectModifiedData } from './selectors';
+import { setUser } from './actions';
 import { SUBMIT } from './constants';
 
 export function* submitForm() {
@@ -41,6 +42,7 @@ export function* submitForm() {
       yield all([
         call(auth.setToken, response.jwt, body.rememberMe),
         call(auth.setUserInfo, response.user, body.rememberMe),
+        put(setUser(response.user)),
       ]);
       yield call(forwardTo, '/');
       const submitWatcher = yield fork(takeLatest, SUBMIT, submitForm);

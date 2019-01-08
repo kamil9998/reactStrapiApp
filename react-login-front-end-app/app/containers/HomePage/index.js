@@ -10,22 +10,35 @@
  */
 
 import React from 'react';
+import {connect} from 'react-redux';
 import { Link } from 'react-router-dom';
+import {bindActionCreators, compose} from 'redux';
 
 // Design
 import Button from 'components/Button';
 
 // Utils
 import auth from 'utils/auth';
+import injectSaga from 'utils/injectSaga';
+import injectReducer from 'utils/injectReducer';
+
+import { setUser } from '../AuthPage/actions';
+import reducer from '../AuthPage/reducer';
+import saga from '../AuthPage//saga';
 
 import './styles.scss';
 
-export default class HomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
-  state = { showButton: false }
+export class HomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  state = { showButton: false, clientId: '1' }
 
   componentDidMount() {
     if (auth.getToken()) {
       this.setState({ showButton: true });
+    }
+    if (auth.getUserInfo()) {
+      const userInfo = auth.getUserInfo();
+      this.setState({clientId: userInfo._id});
+      this.props.setUser(userInfo);
     }
   }
 
@@ -46,7 +59,7 @@ export default class HomePage extends React.Component { // eslint-disable-line r
             This is the HomePage of your app therefore the access is not restricted
           </p>
           <p>
-            Try to access a protected url by either changing the url from the browser or by clicking on the <Link to={'/${Math.random}'}>link</Link>
+            Try to access a protected url by either changing the url from the browser or by clicking on the <Link to={`/client/${this.state.clientId}`}>link</Link>
           </p>
           { this.state.showButton ? (
             <Button primary onClick={this.logout} type="button">Logout</Button>
@@ -56,3 +69,16 @@ export default class HomePage extends React.Component { // eslint-disable-line r
     );
   }
 }
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    setUser
+  }, dispatch);
+}
+
+const withConnect = connect('', mapDispatchToProps);
+
+const withReducer = injectReducer({key: 'authPage', reducer});
+const withSaga = injectSaga({key: 'authPage', saga});
+
+export default compose(withReducer, withSaga, withConnect,)(HomePage);

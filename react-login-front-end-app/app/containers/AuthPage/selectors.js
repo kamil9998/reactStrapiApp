@@ -8,15 +8,25 @@ const selectAuthPageDomain = (state) => state.get('authPage');
 /**
  * Other specific selectors
  */
- const makeSelectFormType = () => createSelector(
-   selectAuthPageDomain,
-   (substate) => substate.get('formType'),
- );
+const makeSelectFormType = () => createSelector(
+  selectAuthPageDomain,
+  (substate) => substate.get('formType'),
+);
 
- const makeSelectModifiedData = () => createSelector(
-   selectAuthPageDomain,
-   (substate) => substate.get('modifiedData').toJS(),
- );
+const makeSelectModifiedData = () => createSelector(
+  selectAuthPageDomain,
+  (substate) => substate.get('modifiedData').toJS(),
+);
+
+const makeSelectUser = () => createSelector(
+  selectAuthPageDomain,
+  (substate) => substate.get('user').toJS(),
+);
+
+const makeSelectUserId = () => createSelector(
+  makeSelectUser,
+  (substate) => substate.get('_id'),
+);
 
 /**
  * Default selector used by AuthPage
@@ -31,5 +41,7 @@ export default makeSelectAuthPage;
 export {
   makeSelectFormType,
   makeSelectModifiedData,
+  makeSelectUser,
+  makeSelectUserId,
   selectAuthPageDomain,
 };
