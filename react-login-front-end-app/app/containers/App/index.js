@@ -29,7 +29,7 @@ export default function App() {
         <Route exact path="/" component={HomePage}/>
         <Route exact path="/connect/:provider" component={ConnectPage}/>
         <Route exact path="/auth/:authType/:id?" component={AuthPage}/>
-        <ProtectedRoute exact path="/client/:id" component={SecurePage}/>
+        <ProtectedRoute exact path="/client/:id" component={ClientPage}/>
         <Route component={NotFoundPage}/>
       </Switch>
     </div>

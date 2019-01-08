@@ -17,7 +17,18 @@ import makeSelectClientPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 
-/* import {Query} from 'react-apollo'; */
+import gql from 'graphql-tag';
+import {Query} from 'react-apollo';
+const GET_TRAININGS = gql`
+  {
+    trainings{
+      _id
+      title
+      startDate
+      endDate
+    }
+  }
+`;
 /* import {GET_TRAININGS} from '../../queries'; */
 
 export class ClientPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -29,7 +40,7 @@ export class ClientPage extends React.Component { // eslint-disable-line react/p
         <p>
           <Link to="/">Back to HomePage</Link>
         </p>
-        {/* <Query query={GET_TRAININGS}>
+        <Query query={GET_TRAININGS}>
           {({ loading, error, data }) => {
             if (loading) {
               return null;
@@ -39,15 +50,13 @@ export class ClientPage extends React.Component { // eslint-disable-line react/p
               return `Error: ${error}`;
             }
 
-            return (
-              <div className="productPageWrapper">
-                <div className="container">
-                  
-                </div>
-              </div>
-            );
+            return 
+              {
+                data.trainings
+              }
+            
           }}
-        </Query> */}
+        </Query>
       </div>
     );
   }
